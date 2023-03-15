@@ -1,0 +1,261 @@
+Simulate the file allocation strategies
+--------------------------------------------------------------------------------
+a)Write a c program for simulating the Sequential File Allocation algorithm
+
+Aim: To write a c program to simulate Sequential File Allocation Strategy 
+
+Program:
+#include<stdio.h>
+#include<conio.h>
+void main()
+{
+  int memory[25];
+  int i,len,startaddr,flag,endaddr,name;
+  for(i=0;i<25;i++)
+  {
+     memory[i]=0;
+     printf("%d",memory[i]);
+  }
+  printf("\n Enter file name(0 to quit):");
+  scanf("%d",&name);
+  while(name!=0)
+  {
+     printf("\n Enter length of file:");
+     scanf("%d",&len);
+     printf("\n enter starting location of the file :");
+     scanf("%d",&startaddr);
+     endaddr=startaddr+len;
+     flag=0;
+     for(i=startaddr;(i<endaddr && endaddr<25);i++)
+     {
+        if(memory[i]!=0)
+        {
+          flag=1;
+          printf("\n No sufficient memory to fill ....");
+          break;
+        }
+     }
+     if(flag==0)
+     {
+       for(i=startaddr;i<endaddr;i++)
+       {
+          memory[i]=name;
+       }
+     }
+     printf("\n enter file name(0 to quit):");
+     scanf("%d",&name);
+   }
+   for(i=0;i<25;i++)
+   {
+     printf("%d",memory[i]);
+   }
+   getch()
+ }
+
+Output:
+0000000000000000000000000
+ Enter file name(0 to quit):1
+
+ Enter length of file:3
+
+ enter starting location of the file :1
+
+ enter file name(0 to quit):2
+
+ Enter length of file:4
+
+ enter starting location of the file :3
+
+ No sufficient memory to fill ....
+ enter file name(0 to quit):3
+
+ Enter length of file:5
+
+ enter starting location of the file :4
+
+ enter file name(0 to quit):0
+0111333330000000000000000
+
+
+---------------------------------------------------------------------------------
+b) Write a C program for simulating the Indexed File Allocation algorithm
+Aim: To write a C program for simulating the Indexed File Allocation algorithm
+Program:
+#include<stdio.h>
+//#include<conio.h>
+#include<stdlib.h>
+struct block
+{
+  int bno,flag;
+};
+struct block b[100];
+int rnum();
+void main()
+{
+  int p[10],r[10][10],ab[10],i,j,n,s;
+  //clrscr();
+  printf("\nInput");
+  printf("\nentyer no.of files:");
+  scanf("%d",&n);
+  for(i=1;i<=n;i++)
+  {
+     printf("\nenter size of block %d:",i);
+     scanf("%d",&p[i]);
+  }
+  for(i=1;i<=n;i++)
+  {
+    s=rnum();
+    ab[i]=s;
+    for(j=0;j<p[i];j++)
+    {
+       s=rnum();
+       r[i][j]=s;
+    }
+  }
+  printf("\n output");
+  for(i=1;i<=n;i++)
+  {
+    printf("\nfile %d \n block %d contains:",i,ab[i]);
+    for(j=0;j<p[i];j++)
+    {
+      printf("%6d",r[i][j]);
+    }
+  }
+ }
+ int rnum()
+ {
+   int k=0,i;
+   for(i=1;i<=100;i++)
+   {
+      k=rand()%100;
+      if(b[k].flag!=-1)
+      break;
+   }
+   return k;
+ }
+
+Output:
+Input
+entyer no.of files:3
+
+enter size of block 1:5
+
+enter size of block 2:6
+
+enter size of block 3:9
+
+ output
+file 1 
+ block 83 contains:    86    77    15    93    35
+file 2 
+ block 86 contains:    92    49    21    62    27    90
+file 3 
+ block 59 contains:    63    26    40    26    72    36    11    68    67
+ 
+
+-----------------------------------------------------------------------------------
+c)Write a C program for simulating the Linked File Allocation algorithm
+ 
+Aim:To write a C program for simulating the Linked File Allocation algorithm
+Program:
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+typedef struct
+{
+int bno,flag,bn[20];
+}
+block;
+block b[100],b1;
+void main()
+{
+	int rnum();
+	int p[30],kk[20],i,n,t,s1,s,r,j,c=1;
+	//clrscr();
+	printf("\n enter no of inputs files:");
+	scanf("%d",&n);
+	printf("\n input the requirements:");
+	for(i=1;i<=n;i++)
+	{
+	printf("\n enter no of blocks needed for file%d:",i);
+	scanf("%d",&p[i]);
+	}
+	t=1;
+	for(i=1;i<=n;i++)
+	{
+	for(j=1;j<=p[i];j++)
+	{
+	s=rnum();
+	b[s].flag=1;
+	b[c].bno=s;
+	r=p[i]-1;
+	kk[i]=s;
+	t=1;
+	c++;
+	}
+	}
+	while(r!=0)
+	{
+	s1=rnum();
+	b[s].bn[t]=s1;
+	b[s].flag=1;
+	b[i].bno=s1;
+	r=r-1;
+	t=t+1;
+	}
+	c++;
+	printf("\n allocation\n");
+	c=1;
+	for(i=1;i<=n;i++)
+	{
+		printf("\nallocated for file %d:",i);
+		for(j=1;j<=p[i];j++)
+		{
+		if(j==1)
+		{
+		printf("%3d",b[c].bno);
+		c++;
+		}
+		else
+		{
+		    printf("--->%3d",b[c].bno);
+		    c++;
+		}
+	}
+	printf("\n");
+}
+}
+int rnum()
+{
+int k=0,i;
+for(i=1;i<=100;i++)
+{
+k=rand()%100;
+k+=10;
+if(b[k].flag!=1)
+break;
+}
+return k;
+}
+
+Output:
+enter no of inputs files:3
+
+ input the requirements:
+ enter no of blocks needed for file1:5
+
+ enter no of blocks needed for file2:4
+
+ enter no of blocks needed for file3:2
+
+ allocation
+
+allocated for file 1: 93---> 96---> 87--->100--->103
+
+allocated for file 2: 45--->102---> 59---> 31
+
+allocated for file 3: 72---> 37
+
+
+
+ 
