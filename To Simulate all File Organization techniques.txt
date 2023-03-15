@@ -1,0 +1,361 @@
+Simulate all File Organization techniques
+--------------------------------------------------------------------------------
+a)	Write a C program to simulate Single Level Directory file Organization technique
+
+Aim: To write a C program for simulating Single level Directory file Organization technique
+Program:
+#include<stdio.h>
+//#include<conio.h>
+#include<string.h>
+void main()
+{
+int nf=0,i=0,j=0,ch;
+char mdname[10],fname[10][10],name[10];
+//clrscr();
+printf("Enter the directory name:");
+scanf("%s",mdname);
+printf("Enter the number of files:");
+scanf("%d",&nf);
+do
+{
+printf("Enter file name to be created:");
+scanf("%s",name);
+for(i=0;i<nf;i++)
+{
+if(!strcmp(name,fname[i]))
+break;
+}
+if(i==nf)
+{
+strcpy(fname[j++],name);
+nf++;
+}
+else
+printf("There is already %s\n",name);
+printf("Do you want to enter another file(yes - 1 or no - 0):");
+scanf("%d",&ch);
+}
+while(ch==1);
+printf("Directory name is:%s\n",mdname);
+printf("Files names are:");
+for(i=0;i<j;i++)
+printf("\n%s",fname[i]);
+//getch();
+}
+
+Output:
+
+Enter the directory name:abc
+Enter the number of files:2
+Enter file name to be created:aaa
+Do you want to enter another file(yes - 1 or no - 0):1
+Enter file name to be created:bbb
+Do you want to enter another file(yes - 1 or no - 0):0
+Directory name is:abc
+Files names are:
+aaa
+bbb
+ 
+
+
+ -----------------------------------------------------------------------------------------------
+b)	Write a C program to simulate Two Level Directory file Organization technique
+Aim: To write a C program for simulating Two level Directory file Organization technique
+Pogram:
+
+#include<stdio.h>
+//#include<conio.h>
+#include<string.h>
+struct st
+{
+char dname[10];
+char sdname[10][10];
+char fname[10][10][10];
+int ds,sds[10];
+}dir[10];
+void main()
+{
+int i,j,k,n;
+//clrscr();
+printf("enter number of directories:");
+scanf("%d",&n);
+for(i=0;i<n;i++)
+{
+printf("enter directory %d names:",i+1);
+scanf("%s",dir[i].dname);
+printf("enter size of directories:");
+scanf("%d",&dir[i].ds);
+for(j=0;j<dir[i].ds;j++)
+{
+printf("enter subdirectory name and size:");
+scanf("%s",dir[i].sdname[j]);
+scanf("%d",&dir[i].sds[j]);
+for(k=0;k<dir[i].sds[j];k++)
+{
+printf("enter file name:");
+scanf("%s",dir[i].fname[j][k]);
+}
+}
+}
+printf("\ndirname\t\tsize\tsubdirname\tsize\tfiles");
+printf("\n******************************************************\n");
+for(i=0;i<n;i++)
+{
+printf("%s\t\t%d",dir[i].dname,dir[i].ds);
+for(j=0;j<dir[i].ds;j++)
+{
+printf("\t%s\t\t%d\t",dir[i].sdname[j],dir[i].sds[j]);
+for(k=0;k<dir[i].sds[j];k++)
+printf("%s\t",dir[i].fname[j][k]);
+printf("\n\t\t");
+}
+printf("\n");
+}
+//getch();    
+}
+
+OUTPUT:
+enter number of directories:1
+enter directory 1 names:aaa
+enter size of directories:2
+enter subdirectory name and size:abc 2
+enter file name:bb
+enter file name:cc
+enter subdirectory name and size:def 2
+enter file name:dd 
+enter file name:ee
+
+dirname         size    subdirname      size    files
+******************************************************
+aaa                   2              abc             2       bb      cc
+                                        def             2       dd      ee
+ 
+
+------------------------------------------------------------------------------------------------
+c)Write a C program to simulate Hierarchical Level Directory file Organization technique
+
+Aim: To write a C program for simulating Single level Directory file Organization technique
+Program:
+#include<stdio.h>
+#include<stdlib.h>
+struct node{
+char N[25];
+int df;
+struct node *pc;
+struct node *ps;
+};
+struct node *A[20];
+int in = 0,c = 0;
+void create(struct node *P,int N)
+{
+int i;
+struct node *Tmp,*T;
+Tmp = P;
+for(i = 0 ;i<N;i++)
+{
+T = malloc(sizeof(struct node));
+printf("Enter name:");
+scanf("%s",T->N);
+printf("Enter dir(1) or file(0): ");
+scanf("%d",&T->df);
+if(T-> df == 1)
+{
+A[c] = T;
+c++;
+}
+T->pc = NULL;
+T->ps = NULL;
+if(i == 0)
+{
+Tmp -> pc = T;
+Tmp = T;
+}
+else{
+Tmp -> ps = T;
+Tmp = T;
+}
+}
+}
+void display(struct node *P)
+{
+int i;
+P = P->pc;
+do{
+printf("\n%s(%d)",P->N,P->df);
+if(P->df == 1 && P->pc != NULL)
+display(P);
+P = P->ps;
+}while(P!=NULL);
+}
+void main()
+{
+int nu,nc,i,j,k;
+struct node *Hdr;
+Hdr = malloc(sizeof(struct node));
+Hdr->df = 1;
+Hdr->pc = NULL;
+Hdr->ps = NULL;
+printf("Enter number of users: ");
+scanf("%d",&nu);
+create(Hdr,nu);
+for(in = 0;in<c;in++)
+{
+printf("\nEnter number of child nodes for %s: ",A[in]->N);
+scanf("%d",&nc);
+create(A[in],nc);
+}
+printf("\nHierarchical\n");
+display(Hdr);
+}
+
+
+
+
+Output:
+
+Enter number of users: 1
+Enter name:aaa
+Enter dir(1) or file(0): 1
+
+Enter number of child nodes for aaa: 2
+Enter name:file1
+Enter dir(1) or file(0): 0
+Enter name:file2
+Enter dir(1) or file(0): 1
+
+Enter number of child nodes for file2: 0
+
+Hierarchical
+
+aaa(1)
+file1(0)
+file2(1)
+
+ 
+-------------------------------------------------------------------------------
+d)Write a C program to simulate DAG file Organization technique
+
+Aim: To write a C program for simulating DAG file Organization technique
+Program:
+#include<stdio.h>
+//#include<conio.h>
+#include<string.h>
+struct node
+{
+char N[25];
+int df;
+struct node *ptr;
+};
+struct node *A[20];
+int in=0;c=0;
+ void display()
+ {
+  int i;
+  struct node *P;
+  for(i=0;i<c;i++)
+  {
+   P = A[i];
+   printf("\n%s(%d)",P->N,P->df);
+   P = P->ptr;
+   
+   while(P!= NULL)
+   {
+    printf("->%s(%d)",P->N,P->df);
+    P = P->ptr;
+    }
+   }
+  }
+  void DAG()
+  {
+  struct node *T,*P,*Tmp;
+  int i,j,Flag,nv;
+  for(in=0;in<c;in++)
+  {
+   P = A[in];
+   printf("\n enter no.of adjacent vertices for %s:",A[in]->N);
+   scanf("%d",&nv);
+   for(i=0;i<nv;i++)
+   {
+    T = malloc(sizeof(struct node));
+    printf("enter name");
+    scanf("%s",T->N);
+    printf("enter dir(1) or file(0):");
+    scanf("%d",&T->df);
+    T->ptr = T;
+    P=T;
+    if(T->df==1)
+    {
+     Flag = 1;
+     for(j=0;j<c;j++)
+     {
+      if(strcmp(A[j]->N,T->N)==0)
+      {
+      Flag = 0;
+      break;
+      }
+     }
+    if(Flag==1)
+    {
+     Tmp = malloc(sizeof(struct node));
+     strcpy(Tmp->N,T->N);
+     Tmp->df = T->df;
+     Tmp->ptr = NULL;
+     A[c] = Tmp;
+     c++;
+    }
+    }
+    }
+    }
+    }
+    void create(int N)
+    {
+     int i;
+     struct node *T;
+     for(i=0;i<N;i++)
+     {
+      T = malloc(sizeof(struct node));
+      printf("enter name:");
+      scanf("%s",T->N);
+      printf("enter dir(1) or file(0):");
+      scanf("%d",&T->df);
+      T->ptr=NULL;
+      A[c]=T;
+      c++;
+     }
+     }
+     void main()
+     {
+     int nu;
+     //clrscr();
+     printf("enter no.of users:");
+     scanf("%d",&nu);
+     create(nu);
+     DAG();
+     printf("\n DAG - adjancey list representation\n");
+     display();
+     //getch();
+    }      
+
+ Output:
+enter no.of users:2
+enter name:abc
+enter dir(1) or file(0):1
+enter name:def
+enter dir(1) or file(0):0
+
+enter no.of adjacent vertices for abc:2
+enter name:aaa
+enter dir(1) or file(0):0
+enter name:bbb
+enter dir(1) or file(0):0
+
+enter no.of adjacent vertices for def:1
+enter name: hhh
+enter dir(1) or file(0):0 
+
+ DAG - adjancey list representation
+
+abc(1)
+def(0)
+
+
