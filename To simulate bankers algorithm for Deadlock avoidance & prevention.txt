@@ -1,0 +1,274 @@
+To simulate bankers algorithm for Deadlock Avoidance and Deadlock Prevention
+------------------------------------------------------------------------
+
+a)Write a C program to simulate Bankers Algorithm for Deadlock Avoidance
+
+Aim: To write a C program for simulating Bankers Algorithm for Deadlock Avoidance
+Program:
+#include<stdio.h>
+//#include<conio.h>
+void main()
+{
+int available[3],work[5],max[5][3],allocation[5][3],need[5][3],safe[5],totalres[5];
+char finish[5];
+int i,j,k,totalloc=0,state,value=0;
+//clrscr();
+printf("Enter Instances of each Resource");
+for(i=0;i<3;i++)
+{
+scanf("%d",&totalres[i]);
+}
+printf("Enter Maximum resources for each processes");
+for(i=0;i<5;i++)
+{
+for(j=0;j<3;j++)
+{
+printf("\n Enter process %d Resource %d",i,(j+1));
+scanf("%d",&max[i][j]);
+}
+}
+//clrscr();
+printf("Enter number of resources allocated to each Process");
+for(i=0;i<5;i++)
+{
+for(j=0;j<3;j++)
+{
+printf("\n Enter the resource of R%d allocated to process %d",(j+1),i);
+scanf("%d",&allocation[i][j]);
+}
+}
+for(i=0;i<5;i++)
+{
+for(j=0;j<3;j++)
+{
+need[i][j]=max[i][j]-allocation[i][j];
+}
+}
+for(i=0;i<5;i++)
+{
+finish[i]='f';
+}
+for(i=0;i<3;i++)
+{
+totalloc=0;
+for(j=0;j<5;j++)
+{
+totalloc=totalloc+allocation[j][i];
+}
+available[i]=totalres[i]-totalloc;
+work[i]=available[i];
+}
+//clrscr();
+printf("\n Allocated Resources \n");
+for(i=0;i<5;i++)
+{
+for(j=0;j<3;j++)
+{
+printf("%d",allocation[i][j]);
+}
+printf("\n");
+}
+printf("\n Maximum Resources \n");
+for(i=0;i<5;i++)
+{
+for(j=0;j<3;j++)
+{
+printf("%d",max[i][j]);
+}
+printf("\n");
+}
+printf("\n Needed Reources \n");
+for(i=0;i<5;i++)
+{
+for(j=0;j<3;j++)
+{
+printf("%d",need[i][j]);
+}
+printf("\n");
+}
+printf("\n Available Reources");
+for(i=0;i<3;i++)
+{
+printf("%d",available[i]);
+}
+printf("\n");
+for(i=0;i<5;i++)
+{
+for(j=0;j<3;j++)
+{
+if((finish[i]=='f')&&(need[i][j]<=work[j]))
+{
+state=1;
+continue;
+}
+else
+{
+state=0;
+break;
+}
+}
+if(state==1)
+{
+for(j=0;j<3;j++)
+{
+work[j]=work[j]+allocation[i][j];
+}
+finish[i]='t';
+safe[value]=i;
+++value;
+}
+if(i==4)
+{
+if(value==5)
+{
+break;
+}
+else
+{
+i=-1;
+}
+}
+}
+printf("\n Safe States are");
+for(i=0;i<5;i++)
+{
+printf("P%d",safe[i]);
+}
+}
+
+Output:
+Enter Instances of each Resource 10
+5
+7
+Enter Maximum resources for each processes
+ Enter process 0 Resource 1: 7
+ Enter process 0 Resource 2: 5
+ Enter process 0 Resource 3: 3
+ Enter process 1 Resource 1: 3
+ Enter process 1 Resource 2: 2
+ Enter process 1 Resource 3: 2
+ Enter process 2 Resource 1: 9
+ Enter process 2 Resource 2: 0
+ Enter process 2 Resource 3: 2
+ Enter process 3 Resource 1: 2
+ Enter process 3 Resource 2: 2
+ Enter process 3 Resource 3: 2
+ Enter process 4 Resource 1: 4
+ Enter process 4 Resource 2: 3
+ Enter process 4 Resource 3: 3
+ Enter number of resources allocated to each Process
+ Enter the resource of R1 allocated to process 0:0
+ Enter the resource of R2 allocated to process 0:1
+ Enter the resource of R3 allocated to process 0:0
+ Enter the resource of R1 allocated to process 1:2
+ Enter the resource of R2 allocated to process 1:0
+ Enter the resource of R3 allocated to process 1:0
+ Enter the resource of R1 allocated to process 2:3
+ Enter the resource of R2 allocated to process 2:0
+ Enter the resource of R3 allocated to process 2:2
+ Enter the resource of R1 allocated to process 3:2
+ Enter the resource of R2 allocated to process 3:1
+ Enter the resource of R3 allocated to process 3:1
+ Enter the resource of R1 allocated to process 4:0
+ Enter the resource of R2 allocated to process 40
+ Enter the resource of R3 allocated to process 4:2
+ 
+Allocated Resources 
+010
+200
+302
+211
+002
+
+ Maximum Resources 
+753
+322
+902
+222
+433
+
+ Needed Resources 
+743
+122
+600
+011
+431
+Available Reources332
+Safe States areP1P3P4P0P2
+
+
+ ------------------------------------------------------------------------------------
+b)Write a C program to simulate Bankers Algorithm for Deadlock Prevention
+
+Aim: To write a C program for simulating Bankers Algorithm for Deadlock Prevention
+Program:
+#include<stdio.h>
+#include<conio.h>
+ void main()
+{
+ int nort,nopro,avail[20],req[20][20],i,j,k,flag=0;
+ clrscr();
+ printf("\n enter the no of resource types:");
+ scanf("%d",&nort);
+
+ printf("\n enter the no of instances of each resource type:");
+ for(i=0;i<nort;i++)
+ scanf("%d",&avail[i]);
+
+ printf("\n enter the no of processes:");
+ scanf("%d",&nopro);
+
+ printf("\n enter the requests of each process:");
+ for(i=0;i<nopro;i++)
+ for(j=0;j<nort;j++)
+ scanf("%d",&req[i][j]);
+
+ for(i=0;i<nopro;i++)
+ {
+  flag=0;
+  for(j=0;j<nort;j++)
+  {
+   if(req[i][j]>avail[j])
+   {
+     flag=1;
+   }
+  }
+  if(flag==1)
+  {
+   printf("\n resources for process p%d cannot be allocated to prevent deadlock",i);
+  }
+  else
+  {
+   for(k=0;k<nort;k++)
+   {
+    avail[k]=avail[k]-req[i][k];
+    printf("\n%d instances of resource type R%d are allocated to process P%d",req[i][k],k,i);
+   }
+  }
+ }
+ printf("\n remaining resources after allocation are");
+ for(i=0;i<nort;i++)
+ printf("\n  %d",avail[i]);
+ getch();
+ }
+
+
+Output:
+enter the no of resource types:2
+
+ enter the no of instances of each resource type:3 4
+
+ enter the no of processes:2
+
+ enter the requests of each process:5 6 2 1
+
+ resources for process p0 cannot be allocated to prevent deadlock
+2 instances of resource type R0 are allocated to process P1
+1 instances of resource type R1 are allocated to process P1
+ remaining resources after allocation are
+  1
+  3
+
+
+
+ 
