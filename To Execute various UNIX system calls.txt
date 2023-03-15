@@ -1,0 +1,326 @@
+Execute various UNIX system calls
+--------------------------------------------------------------------------------
+1)Process Management system calls
+
+a)	Aim: To write C programs to simulate UNIX command fork()
+Program:
+
+#include<stdio.h> #include<sys/types.h> main()
+ {    int pid;
+    pid=fork(); 
+   if(pid==0) 
+{ 
+printf("\n I am the child"); 
+printf("\n I am the parent :%d",getppid()); 
+printf("\n I am the child :%d",getpid()); 
+   }    
+Else
+{
+ printf("\n I am the parent ");
+ printf("\n I am the parents parent :%d",getppid()); printf("\n I am the parent :%d\n",getpid()); 
+   } 
+} 
+ 
+ 
+Output: 
+I am the child 
+I am the  parent:  3944 
+I am the child:  3945 
+I am the parent 
+I am the parents parent:  3211 
+I am the parent:  3944 
+ 
+ 
+ b)Aim: To write C programs to simulate UNIX command execv()
+Program:
+
+#include<stdio.h>
+ #include<unistd.h>
+ main() 
+{
+ char *temp[3]; 
+temp[0]="ls"; 
+temp[1]="-l"; 
+temp[2]=(char *)0; 
+execv("/bin/ls",temp); 
+printf("this will not print\n"); 
+} 
+ 
+Output: 
+total 76 
+-rwxr-xr-x    1 be322    group     4716 Mar 7 10:13  a.out 
+-rw-r--r--    1 be322    group      688 Feb 20  13:52  comm.c 
+-rw-r--r--    1 be322    group      925 Feb 20  13:54  echomsg.c 
+-rw-r--r--    1 be322    group      722 Feb 20  13:55  echopipe.c 
+-rw-r--r--    1 be322    group      178 Feb 20  13:57  exel.c 
+-rw-r--r--    1 be322    group      167 Mar 7   10:13  exev.c 
+-rw-r--r--    1 be322    group     1109 Feb 20 13:57  fflag.c 
+-rw-r--r--    1 be322    group      341 Dec 26  14:47  frk.c 
+-rw-r--r--    1 be322    group      140 Feb 20  13:57  linearg.c 
+-rw-r--r--    1 be322    group      528 Feb 20  13:57  lock.c 
+-rw-r--r--    1 be322    group      254 Feb 20  13:57  msg.c 
+-rw-r--r--    1 be322    group     1036 Feb 20 13:57  msgpass.c 
+-rw-r--r--    1 be322    group      203 Feb 20  13:58  sem.c 
+-rw-r--r--    1 be322    group     1167 Feb 20 13:58  sharememory.c 
+-rw-r--r--    1 be322    group      312 Feb 20  13:58  slp.c 
+-rw-r--r--    1 be322    group     1182 Feb 20 13:58  threadf.c 
+-rw-r--r--    1 be322    group      287 Feb 20  13:59  wt.c 
+ 
+c)Aim: To write C programs to simulate UNIX command execlp()
+Program:
+#include<stdio.h> #include<sys/types.h> 
+main()
+ {   
+   int pid;      
+    pid=fork(); 
+     if(pid==0) 
+    { 
+printf("\n fork program started"); 
+execlp("/bin/ls","ls",NULL); 
+     }      
+else 
+    { 
+printf("\nend"); 
+    } 
+} 
+ 
+ 
+OUTPUT: 
+end$ 
+ fork program started a.out 
+comm.c echomsg.c echopipe.c exel.c exev.c fflag.c frk.c linearg.c lock.c msg.c msgpass.c sem.c 
+sharememory.c 
+slp.c threadf.c 
+wt.c 
+ 
+
+ 
+
+
+
+d)Aim: To write C programs to simulate UNIX command wait()
+Program:
+#include<unistd.h>
+ #include<stdio.h>
+ main() 
+{ 
+int i=0,pid;
+ pid=fork();
+ if(pid==0) 
+{
+ printf("child  process started\n"); 
+for(i=0;i<10;i++)     
+ printf("\n%d",i);
+ printf("\n child process ends"); 
+}
+ else 
+{ 
+printf("\n parent process starts");
+ wait(0); 
+printf("\n parent process ends"); 
+} 
+}
+
+Output:
+parent process starts 
+ child  process started 
+ 
+0 
+1 
+2 
+3 
+4 
+5 
+6 
+7 
+8 9  child process ends 
+ parent process ends 
+
+
+e)Aim: To write C programs to simulate UNIX command sleep()
+                      Program :
+#include<unistd.h> 
+#include<stdio.h> 
+main() 
+{ 
+int i=0,pid; 
+printf("\n ready for fork\n"); 
+pid=fork(); if(pid==0) 
+{ 
+printf("\n child process started \n"); 
+sleep(4); 
+for(i=0;i<10;i++)     
+ printf("\n%d",i); 
+printf("\n child process ends"); 
+} 
+else 
+{ 
+printf("\n I am the parent"); 
+printf("\n parent process ends"); 
+} 
+}
+
+Output:
+ready for fork 
+ I am the parent  
+parent process ends 
+child process started 
+ 
+0 
+1 
+2 
+3 
+4 
+5 
+6 
+7 
+8 9 
+ child process ends 
+
+----------------------------------------------------------------
+2)File Management System calls or I/O System calls
+
+a)Aim: To write C programs to simulate UNIX command pipe()
+  Program :
+#include<stdio.h> 
+#include<unistd.h> 
+#include<sys/ipc.h> 
+#include<sys/types.h>
+ #define msgsize 16 main() 
+{ 
+char *msg="hello world";
+ char inbuff[msgsize]; 
+int p[2],pid,j; 
+pipe(p);
+ pid=fork(); 
+if(pid>0)
+{ 
+close(p[0]);
+ write(p[1],msg,msgsize); 
+} 
+if(pid==0) 
+{ 
+close(p[1]); 
+read(p[0],inbuff,msgsize); 
+printf("%s \n",inbuff); 
+}} 
+Output:
+ hello world
+b)Aim: To write C programs to create semaphore id
+ Program :
+
+#include<unistd.h>
+ #include<sys/ipc.h>
+ main() 
+{
+ int semid,key,nsem,flag;
+ key=(key_t)0X200f; 
+flag=IPC_CREAT|0666; 
+nsem=1; 
+semid=semget(key,nsem,flag); 
+printf("Created a semaphore with  id: %d \n",semid); 
+}
+Output:
+Created a semaphore with id: 589832 
+
+ 
+c)Aim: To write C programs to create shared memory id
+
+ Program :
+#include<sys/types.h> 
+#include<sys/ipc.h> #include<sys/shm.h> main() 
+{ 
+int shmid,flag; 
+key_t key=0X1000; shmid=shmget(key,10,IPC_CREAT|0666); 
+if(shmid<0) 
+{ 
+perror("shmid failed");
+exit(1); 
+} 
+printf("Success shmid is %d /n",shmid); 
+} 
+ 
+Output:
+Success shmid is: 682340 
+
+
+ 
+d)Aim: To write a C program for simulating  File management process(Read,Write)
+
+Program:
+#include <unistd.h>
+#include <sys/types.h>
+#include <fcntl.h>
+main()
+{
+int fd1,fd2,n;
+char *ch;
+fd1=open("file1", O_CREAT|O_RDWR,0666);
+if(fd1==-1)
+{
+printf("source filw cannot be processed \n");
+exit(0);
+}
+fd2=open("file2",O_CREAT|O_RDWR,0666);
+if(fd2==-1)
+{
+printf("destination file cannot be processed \n");
+exit(0);
+}
+while(1)
+{
+n=read(fd1,ch,1);
+if(n==0)
+41
+break;
+write(fd2,ch,1);
+}
+close(fd1);
+close(fd2);
+}
+Output:
+vi file1
+good morning
+cc filerw.c
+./a.out
+vi file2
+good morning
+
+
+--------------------------------------------------------------------
+3)Input/Output System calls
+
+Write a C program to simulate  IO System calls 
+AIM: To write a C program for simulating  IO System calls
+Program:
+#include<stdio.h>
+#include<unistd.h>
+#include<string.h>
+#include<fcntl.h>
+main( )
+{
+int fd[2];
+char buf1[25]= "just a test\n";
+char buf2[50];
+fd[0]=open("file1",O_RDWR);
+fd[1]=open("file2",O_RDWR);
+write(fd[0], buf1, strlen(buf1));
+printf("\n Enter the text now….");
+scanf("\n %s",buf1);
+printf("\n Cat file1 is \n hai");
+write(fd[0], buf1, strlen(buf1));
+lseek(fd[0], SEEK_SET, 0);
+read(fd[0], buf2, sizeof(buf1));
+write(fd[1], buf2, sizeof(buf2));
+close(fd[0]);
+close(fd[1]);
+printf("\n");
+return 0;
+}
+
+
+Output:
+           Enter the text now….abcdef
+
+           Cat file1 is 
+           hai 
